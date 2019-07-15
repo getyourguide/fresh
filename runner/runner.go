@@ -9,6 +9,7 @@ func run() bool {
 	runnerLog("Running...")
 
 	cmd := exec.Command("dlv", "--listen=:2345", "--headless=true", "--api-version=2", "exec", buildPath())
+	runnerLog("Runner command:", cmd)
 
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
