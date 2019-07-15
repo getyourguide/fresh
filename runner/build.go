@@ -10,8 +10,8 @@ import (
 func build() (string, bool) {
 	buildLog("Building...")
 
-	cmd := exec.Command("dlv", "debug", "--headless", "--listen=:4000", "--api-version=2", "--output", buildPath(), root())
-	buildLog("Build command:", cmd)
+	cmd := exec.Command("go", "build", "-gcflags='all=-N -l'", "-o", buildPath(), root())
+	buildLog("Build command: %s %s", cmd.Path, cmd.Args)
 
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
