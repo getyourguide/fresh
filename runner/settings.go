@@ -148,7 +148,7 @@ func runCmd() *exec.Cmd {
 }
 
 func debugEnabled() bool {
-	return os.Getenv(delveDisabledEnvVar) != "false"
+	return os.Getenv(delveDisabledEnvVar) != "true"
 }
 
 func debugPort() string {
