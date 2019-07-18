@@ -17,6 +17,8 @@ const (
 	envSettingsPrefix   = "RUNNER_"
 	mainSettingsSection = "Settings"
 	defaultDelvePort    = "2345"
+	delveDisabledEnvVar = "DELVE_DISABLED"
+	delvePortEnvVar     = "DELVE_PORT"
 )
 
 var settings = map[string]string{
@@ -146,11 +148,11 @@ func runCmd() *exec.Cmd {
 }
 
 func debugEnabled() bool {
-	return os.Getenv("DISABLE_DELVE") != "false"
+	return os.Getenv(delveDisabledEnvVar) != "false"
 }
 
 func debugPort() string {
-	if port := os.Getenv("DELVE_PORT"); port != "" {
+	if port := os.Getenv(delvePortEnvVar); port != "" {
 		return port
 	} else {
 		return defaultDelvePort
