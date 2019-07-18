@@ -4,13 +4,12 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"os/exec"
 )
 
 func build() (string, bool) {
 	buildLog("Building...")
 
-	cmd := exec.Command("go", "build", "-gcflags='all=-N -l'", "-o", buildPath(), root())
+	cmd := buildCmd()
 	buildLog("Build command: %s %s", cmd.Path, cmd.Args)
 
 	stderr, err := cmd.StderrPipe()

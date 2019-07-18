@@ -3,6 +3,7 @@ package runner
 import (
 	"fmt"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strconv"
@@ -15,6 +16,7 @@ import (
 const (
 	envSettingsPrefix   = "RUNNER_"
 	mainSettingsSection = "Settings"
+	defaultDelvePort    = "2345"
 )
 
 var settings = map[string]string{
@@ -125,6 +127,34 @@ func buildPath() string {
 		p += ".exe"
 	}
 	return p
+}
+
+func buildCmd() *exec.Cmd {
+	if debugEnabled() {
+		return exec.Command("go", "build", "-gcflags='all=-N -l'", "-o", buildPath(), root())
+	} else {
+		return exec.Command("go", "build", "-o", buildPath(), root())
+	}
+}
+
+func runCmd() *exec.Cmd {
+	if debugEnabled() {
+		return exec.Command("dlv", "--listen=:"+debugPort(), "--headless=true", "--api-version=2", "exec", buildPath())
+	} else {
+		return exec.Command(buildPath())
+	}
+}
+
+func debugEnabled() bool {
+	return os.Getenv("DISABLE_DELVE") != "false"
+}
+
+func debugPort() string {
+	if port := os.Getenv("DELVE_PORT"); port != "" {
+		return port
+	} else {
+		return defaultDelvePort
+	}
 }
 
 func buildErrorsFileName() string {

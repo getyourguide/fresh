@@ -2,14 +2,13 @@ package runner
 
 import (
 	"io"
-	"os/exec"
 )
 
 func run() bool {
 	runnerLog("Running...")
 
-	cmd := exec.Command("dlv", "--listen=:2345", "--headless=true", "--api-version=2", "exec", buildPath())
-	runnerLog("Runner command:", cmd)
+	cmd := runCmd()
+	runnerLog("Runner command: %s %s", cmd.Path, cmd.Args)
 
 	stderr, err := cmd.StderrPipe()
 	if err != nil {
