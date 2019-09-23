@@ -128,6 +128,7 @@ func buildPath() string {
 	if runtime.GOOS == "windows" && filepath.Ext(p) != ".exe" {
 		p += ".exe"
 	}
+
 	return p
 }
 
@@ -140,7 +141,11 @@ func buildCmd() *exec.Cmd {
 }
 
 func runCmd() *exec.Cmd {
-	return exec.Command(buildPath())
+	if debugEnabled() {
+		return exec.Command("dlv", "--headless=true", "--continue", "--listen=:"+debugPort(), "--accept-multiclient", "--api-version=2", "--log", "exec", buildPath())
+	} else {
+		return exec.Command(buildPath())
+	}
 }
 
 func debugEnabled() bool {

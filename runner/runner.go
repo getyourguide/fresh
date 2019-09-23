@@ -2,8 +2,6 @@ package runner
 
 import (
 	"io"
-	"os/exec"
-	"strconv"
 )
 
 func run() bool {
@@ -27,15 +25,6 @@ func run() bool {
 		fatal(err)
 	}
 
-	var debugCmd = &exec.Cmd{}
-	if debugEnabled() {
-		debugCmd = exec.Command("dlv", "--headless=true", "--continue", "--listen=:"+debugPort(), "--accept-multiclient", "--api-version=2", "--log", "attach", strconv.Itoa(cmd.Process.Pid))
-		err = debugCmd.Start()
-		if err != nil {
-			fatal(err)
-		}
-	}
-
 	go io.Copy(appLogWriter{}, stderr)
 	go io.Copy(appLogWriter{}, stdout)
 
@@ -44,10 +33,6 @@ func run() bool {
 		pid := cmd.Process.Pid
 		runnerLog("Killing PID %d", pid)
 		cmd.Process.Kill()
-		if debugCmd.Process.Pid != 0 { // Not null
-			runnerLog("Killing debug server PID %d", debugCmd.Process.Pid)
-			debugCmd.Process.Kill()
-		}
 	}()
 
 	return true
