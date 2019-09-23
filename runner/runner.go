@@ -29,7 +29,7 @@ func run() bool {
 
 	var debugCmd = &exec.Cmd{}
 	if debugEnabled() {
-		debugCmd = exec.Command("dlv", "--headless=true", "--continue", "--listen=localhost:"+debugPort(), "--accept-multiclient", "--api-version=2", "--log", "attach", strconv.Itoa(cmd.Process.Pid))
+		debugCmd = exec.Command("dlv", "--headless=true", "--continue", "--listen=:"+debugPort(), "--accept-multiclient", "--api-version=2", "--log", "attach", strconv.Itoa(cmd.Process.Pid))
 		err = debugCmd.Start()
 		if err != nil {
 			fatal(err)
