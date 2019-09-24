@@ -142,7 +142,7 @@ func buildCmd() *exec.Cmd {
 
 func runCmd() *exec.Cmd {
 	if debugEnabled() {
-		return exec.Command("dlv", "--headless=true", "--continue", "--listen=:"+debugPort(), "--accept-multiclient", "--api-version=2", "--log", "exec", buildPath())
+		return exec.Command("dlv", "--headless=true", "--continue", "--listen=:"+debugPort(), "--accept-multiclient", "--api-version=2", "exec", buildPath())
 	} else {
 		return exec.Command(buildPath())
 	}
