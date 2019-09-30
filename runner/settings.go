@@ -134,9 +134,9 @@ func buildPath() string {
 
 func buildCmd() *exec.Cmd {
 	if debugEnabled() {
-		return exec.Command("go", "build", "-gcflags='all=-N -l'", "-o", buildPath(), root())
+		return exec.Command("go", "install", "-gcflags='all=-N -l'", "./...")
 	} else {
-		return exec.Command("go", "build", "-o", buildPath(), root())
+		return exec.Command("go", "install", "./...")
 	}
 }
 
